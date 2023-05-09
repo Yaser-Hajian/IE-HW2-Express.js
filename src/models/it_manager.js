@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const userSchema = require('./user')
+const User = require('./user')
 const timestamps = require('mongoose-timestamp');
 
 const ItManagerSchema = mongoose.Schema({
@@ -12,9 +12,9 @@ const ItManagerSchema = mongoose.Schema({
     default: true
   }
 });
-ItManagerSchema.add(userSchema);
 ItManagerSchema.plugin(timestamps);
-const ItManager = mongoose.model("ItManager", ItManagerSchema);
+const ItManager = User.discriminator("ItManager", ItManagerSchema)
+
 module.exports = {
   ItManagerSchema,
   ItManager

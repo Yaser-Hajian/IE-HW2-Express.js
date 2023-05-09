@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const userSchema = require("./user");
+const User = require("./user");
 const timestamps = require("mongoose-timestamp");
 
 const educationManagerSchema = mongoose.Schema({
@@ -15,10 +15,11 @@ const educationManagerSchema = mongoose.Schema({
 educationManagerSchema.add(userSchema);
 educationManagerSchema.plugin(timestamps);
 
-const EducationManager = mongoose.model(
+const EducationManager = User.discriminator(
   "EducationManager",
   educationManagerSchema
 );
+
 module.exports = {
   educationManagerSchema,
   EducationManager,
