@@ -1,6 +1,9 @@
 const { validationResult } = require("express-validator");
 
 module.exports = class {
+  constructor() {
+    this.validate = this.validate.bind(this);
+  }
   validationBody(req, res) {
     const result = validationResult(req);
     if (!result.isEmpty()) {
