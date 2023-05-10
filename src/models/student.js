@@ -11,6 +11,7 @@ const studentSchema = mongoose.Schema({
   student_ID: {
     type: Number,
     required: true,
+    unique : true
   },
   entrance_year: {
     type: Number,
@@ -22,6 +23,7 @@ const studentSchema = mongoose.Schema({
   },
   average_score: {
     type: Number,
+    default: null
     // required: true,
   },
   major: {
