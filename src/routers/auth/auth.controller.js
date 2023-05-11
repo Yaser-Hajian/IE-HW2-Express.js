@@ -18,7 +18,7 @@ module.exports = new (class extends controller{
       return res.status(401).json({ error: 'Invalid email or password' });
     }
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '2m' });
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '24h' });
 
     return res.status(200).json({ token });
   } catch (error) {
