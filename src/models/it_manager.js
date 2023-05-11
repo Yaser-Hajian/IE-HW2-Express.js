@@ -6,10 +6,6 @@ const ItManagerSchema = mongoose.Schema({
   employee_ID: {
     type: Number,
     required: true,
-  },
-  isAdmin: {
-    type: Boolean,
-    default: true
   }
 });
 ItManagerSchema.plugin(timestamps);
