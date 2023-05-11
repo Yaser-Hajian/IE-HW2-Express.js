@@ -6,6 +6,10 @@ const officialCourseSchema = mongoose.Schema({
     type: String,
     required: true,
   },
+  major: {
+    type: String,
+    required: true,
+  },
   course_prerequisites: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'OfficialCourse',
