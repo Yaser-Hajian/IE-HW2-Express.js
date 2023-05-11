@@ -6,7 +6,7 @@ const {EducationManager} = require("./../../models/education_manager");
 
 module.exports = new (class extends controller {
   async createProfessor(req, res) {
-    const {
+    let {
       first_name,
       last_name,
       password,
@@ -36,7 +36,7 @@ module.exports = new (class extends controller {
     console.log(new_prof);
     res.status(200).json({
       message: "professor was created successfully!",
-      data: new_student,
+      data: new_prof,
     });
   }
 
