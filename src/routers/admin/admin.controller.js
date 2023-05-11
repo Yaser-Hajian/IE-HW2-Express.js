@@ -3,8 +3,38 @@ const { Professor } = require("./../../models/professor");
 const Student = require("./../../models/student");
 const bcrypt = require("bcrypt");
 const {EducationManager} = require("./../../models/education_manager");
-
+const {ItManager} = require("./../../models/it_manager")
 module.exports = new (class extends controller {
+
+  async createITManager(req,res){
+    let {
+      first_name,
+      last_name,
+      password,
+      phone_number,
+      email,
+      employee_ID,
+    } = req.body;
+
+    const salt = await bcrypt.genSalt(10);
+    password = await bcrypt.hash(password, salt);
+
+    const new_ITMan = new ItManager({
+      first_name,
+      last_name,
+      password,
+      phone_number,
+      email,
+      employee_ID,
+    });
+    await new_ITMan.save();
+    console.log(new_ITMan);
+    res.status(200).json({
+      message: "IT Manager was created successfully!",
+      data: new_ITMan,
+    });
+  }
+
   async createProfessor(req, res) {
     let {
       first_name,
