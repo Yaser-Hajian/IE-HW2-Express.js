@@ -3,8 +3,12 @@ const router = express.Router();
 const adminValidator = require("./admin.validator");
 const adminController = require("./admin.controller");
 
-
-router.post("/ITMan", adminController.createITManager.bind(adminController));
+router.post(
+  "/ITMan",
+  adminValidator.createITManValidator(),
+  adminController.validate,
+  adminController.createITManager.bind(adminController)
+);
 
 router.post(
   "/Professor",
@@ -40,10 +44,7 @@ router.post(
   adminController.createStudent.bind(adminController)
 );
 
-router.get(
-  "/students",
-  adminController.findAllStudents.bind(adminController)
-);
+router.get("/students", adminController.findAllStudents.bind(adminController));
 
 router.get(
   "/student/:id",
@@ -69,10 +70,7 @@ router.post(
   adminController.createManager.bind(adminController)
 );
 
-router.get(
-  "/managers",
-  adminController.getAllManagers.bind(adminController)
-);
+router.get("/managers", adminController.getAllManagers.bind(adminController));
 
 router.get(
   "/manager/:id",
