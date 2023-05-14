@@ -2,19 +2,12 @@ const controller = require("./../controller");
 const { Professor } = require("./../../models/professor");
 const Student = require("./../../models/student");
 const bcrypt = require("bcrypt");
-const {EducationManager} = require("./../../models/education_manager");
-const {ItManager} = require("./../../models/it_manager")
+const { EducationManager } = require("./../../models/education_manager");
+const { ItManager } = require("./../../models/it_manager");
 module.exports = new (class extends controller {
-
-  async createITManager(req,res){
-    let {
-      first_name,
-      last_name,
-      password,
-      phone_number,
-      email,
-      employee_ID,
-    } = req.body;
+  async createITManager(req, res) {
+    let { first_name, last_name, password, phone_number, email, employee_ID } =
+      req.body;
 
     const salt = await bcrypt.genSalt(10);
     password = await bcrypt.hash(password, salt);
@@ -75,6 +68,7 @@ module.exports = new (class extends controller {
     res.json({ data: professors, message: "successful" });
   }
 
+  
   async findProfessorById(req, res) {
     const id = req.params.id;
     if (isNaN(id)) {
@@ -337,21 +331,25 @@ module.exports = new (class extends controller {
     }
   }
 
-  async getAllManagers(req,res){
-    const managers = await EducationManager.find().populate().select("-password");
+  async getAllManagers(req, res) {
+    const managers = await EducationManager.find()
+      .populate()
+      .select("-password");
     res.json({
-        count: managers.length,
-        data: managers,
-        message: "successful",
-      });
-  } 
+      count: managers.length,
+      data: managers,
+      message: "successful",
+    });
+  }
 
-  async findManagerByID(req,res){
+  async findManagerByID(req, res) {
     const employee_ID = req.params.id;
     if (isNaN(employee_ID)) {
       return res.status(400).send("ID must be a number");
     }
-    const manager = await EducationManager.findOne({ employee_ID }).select("-password");
+    const manager = await EducationManager.findOne({ employee_ID }).select(
+      "-password"
+    );
     if (!manager) {
       res.status(404).json({
         message: "we do not have this id",
@@ -365,7 +363,7 @@ module.exports = new (class extends controller {
     });
   }
 
-  async deleteManagerById(req,res){
+  async deleteManagerById(req, res) {
     const employee_ID = req.params.id;
     if (isNaN(employee_ID)) {
       return res.status(400).send("ID must be a number");
@@ -385,20 +383,14 @@ module.exports = new (class extends controller {
       message: "education manager deleted successfully",
     });
   }
-  
-  async updateManagerById(req,res){
+
+  async updateManagerById(req, res) {
     const employee_ID = req.params.id;
     if (isNaN(employee_ID)) {
       return res.status(400).send("ID must be a number");
     }
-    let {
-      faculty,
-      phone_number,
-      email,
-      password,
-      first_name,
-      last_name,
-    } = req.body;
+    let { faculty, phone_number, email, password, first_name, last_name } =
+      req.body;
 
     const salt = await bcrypt.genSalt(10);
     password = await bcrypt.hash(password, salt);
