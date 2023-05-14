@@ -1,0 +1,1124 @@
+openapi: 3.0.0
+info:
+  title: University Project
+  version: 1.0.0
+  contact:
+    name: Yaser Hajian
+    email: mohammadyaser1379@gmail.com
+servers:
+  - url: http://localhost:3000/api-docs
+    description: Local development server
+paths:
+  /login:
+    post:
+      summary: Login with id and password
+      description: login endpoint for all users, use your id and password to receive your 1-hour guranteed token
+      tags: [All users actions]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: "heasmnastii42@gmail.com"
+                password:
+                  type: string
+                  example: "password"
+      responses:
+        "200":
+          description: Successful login
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    example: "your token"
+        "500":
+          description: Internal server error
+  /admin/Professor:
+    post:
+      summary: Add a new teacher
+      tags:
+        - Admin
+      description: Add a new teacher to the database, this action is only approved for admin
+      security:
+        - BearerAuth: [ ]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Teacher_user'
+        description: Fields to add a new teacher
+        required: true
+      responses:
+        '201':
+          description: Teacher added successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Teacher'
+        '400':
+            $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /admin/Professor/{id}:
+    put:
+      summary: Update a teacher by ID
+      tags:
+        - Admin
+      description: Update a teacher's information by ID, this action is only approved for admin
+      security:
+        - BearerAuth: [ ]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: ID of the teacher to update
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Teacher_user'
+        description: Fields to update the teacher
+        required: true
+      responses:
+        '200':
+          description: Teacher updated successfully
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      summary: Delete a teacher by ID
+      tags:
+        - Admin
+      description: Delete a teacher from the database by ID, this action is only approved for admin
+      security:
+        - BearerAuth: [ ]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: ID of the teacher to delete
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Teacher deleted successfully
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    get:
+      summary: Get teacher by ID
+      tags:
+        - Admin
+      description: Get a teacher's information by ID, this action is only approved for admin
+      security:
+        - BearerAuth: [ ]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: ID of the teacher to retrieve
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Teacher information retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Teacher_user'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /admin/Professors:
+    get:
+      summary: Get all teachers
+      tags:
+        - Admin
+      description: Get a list of all teachers in the database, this action is only approved for admin
+      security:
+        - BearerAuth: [ ]
+      responses:
+        '200':
+          description: List of all teachers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Teacher_user'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /admin/student:
+    post:
+      summary: Add a new student
+      tags:
+        - Admin
+      description: Add a new student to the database, this action is only approved for admin
+      security:
+        - BearerAuth: [ ]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Student_user'
+        description: Fields to add a new student
+        required: true
+      responses:
+        '201':
+          description: Student added successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Student'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /admin/student/{id}:
+    put:
+      summary: Update a student by ID
+      tags:
+        - Admin
+      description: Update a student's information by ID, this action is only approved for admin
+      security:
+        - BearerAuth: [ ]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: ID of the student to update
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Student_user'
+        description: Fields to update the student
+        required: true
+      responses:
+        '200':
+          description: Student updated successfully
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      summary: Delete a student by ID
+      tags:
+        - Admin
+      description: Delete a student by ID, this action is only approved for admin
+      security:
+        - BearerAuth: [ ]
+      parameters:
+        - in: path
+          name: id
+          description: ID of student to delete
+          required: true
+          schema:
+            type: string
+          example: 98243005
+      responses:
+        '204':
+          description: Student deleted successfully
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    get:
+      summary: Retrieve a student by ID
+      tags:
+        - Admin
+      description: Retrieve a student by their ID in the database, this action is only approved for admin
+      security:
+        - BearerAuth: [ ]
+      parameters:
+        - name: id
+          in: path
+          description: ID of the student to retrieve
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A student object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Student_user'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /admin/students:
+    get:
+      summary: Retrieve a list of students
+      tags:
+        - Admin
+      description: Retrieve a list of all students in the database, this action is only approved for admin
+      security:
+        - BearerAuth: [ ]
+      parameters: [ ]
+      responses:
+        '200':
+          description: A list of students
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Student_user'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /admin/manager:
+    post:
+      summary: Add a new educational manager
+      tags:
+        - Admin
+      description: Add a new educational manager to the database, this action is only approved for admin
+      security:
+        - BearerAuth: [ ]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EducationalManager_user'
+        description: Fields to add a new educational manager
+        required: true
+      responses:
+        '201':
+          description: Educational manager added successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EducationalManager_user'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /admin/manager/{id}:
+    put:
+      summary: Update a educational manager by ID
+      tags:
+        - Admin
+      description: Update a educational manager's information by ID, this action is only approved for admin
+      security:
+        - BearerAuth: [ ]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: ID of the educational manager to update
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EducationalManager_user'
+        description: Fields to update the educational manager
+        required: true
+      responses:
+        '200':
+          description: Educational manager updated successfully
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      summary: Delete a educational manager by ID
+      tags:
+        - Admin
+      description: Delete a educational manager by ID, this action is only approved for admin
+      security:
+        - BearerAuth: [ ]
+      parameters:
+        - in: path
+          name: id
+          description: ID of educational manager to delete
+          required: true
+          schema:
+            type: string
+          example: 21
+      responses:
+        '204':
+          description: Educational manager deleted successfully
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    get:
+      summary: Retrieve a educational manager by ID
+      tags:
+        - Admin
+      description: Retrieve a educational manager by their ID in the database, this action is only approved for admin
+      security:
+        - BearerAuth: [ ]
+      parameters:
+        - name: id
+          in: path
+          description: ID of the educational manager to retrieve
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A educational manager object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EducationalManager_user'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /admin/managers:
+    get:
+      summary: Retrieve a list of educational managers
+      tags:
+        - Admin
+      description: Retrieve a list of all educational managers in the database, this action is only approved for admin
+      security:
+        - BearerAuth: [ ]
+      parameters: [ ]
+      responses:
+        '200':
+          description: A list of educational managers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EducationalManager_user'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /course:
+    post:
+      security:
+        - BearerAuth: [ ]
+      summary: Create a new course
+      tags:
+        - Educational Manager
+      description: Provide a field courseType to choose you want to create general course or a semester course
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                courseType:
+                  type: string
+                  enum: [ "semester", "general" ]
+                  description: Choose the course type
+                course:
+                  $ref: '#/components/schemas/Course'
+                semesterCourse:
+                  $ref: '#/components/schemas/SemesterCourse'
+              required:
+                - courseType
+              description: Course fields (required for both courseType options)
+      responses:
+        '201':
+          description: Course created successfully
+          content:
+            application/json:
+              schema:
+                properties:
+                  courseType:
+                    type: string
+                    enum: [ "semester", "general" ]
+                    description: The type of the created course
+                  Course:
+                    $ref: '#/components/schemas/Course'
+                  semesterCourse:
+                    $ref: '#/components/schemas/SemesterCourse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '406':
+          $ref: '#/components/responses/InvalidCourse'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /course/{id}:
+    put:
+      security:
+        - BearerAuth: [ ]
+      summary: Update an existing course
+      tags:
+        - Educational Manager
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                courseType:
+                  type: string
+                  enum: [ "semester", "general" ]
+                  description: Choose the course type
+                course:
+                  $ref: '#/components/schemas/Course'
+                semesterCourse:
+                  $ref: '#/components/schemas/SemesterCourse'
+              required:
+                - courseType
+              description: Course fields (required for both courseType options)
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The ID of the course to update
+      responses:
+        '200':
+          description: Course updated successfully
+          content:
+            application/json:
+              schema:
+                properties:
+                  courseType:
+                    type: string
+                    enum: [ "semester", "general" ]
+                    description: The type of the updated course
+                  Course:
+                    $ref: '#/components/schemas/Course'
+                  semesterCourse:
+                    $ref: '#/components/schemas/SemesterCourse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '406':
+          $ref: '#/components/responses/InvalidCourse'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      summary: Delete a course by ID
+      tags:
+        - Educational Manager
+      security:
+        - BearerAuth: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                courseType:
+                  type: string
+                  enum: [ "semester", "general" ]
+                  description: Choose the course type
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: The ID of the course to delete
+      responses:
+        '204':
+          description: Course deleted successfully
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    get:
+      security:
+        - BearerAuth: [ ]
+      summary: Get course details by ID
+      tags:
+        - Educational Manager
+        - Student
+        - Professor
+#      requestBody:
+#        description: Course fields
+#        required: false
+#        content:
+#          application/json:
+#            schema:
+#              type: object
+#              properties:
+#                courseType:
+#                  type: string
+#                  enum:
+#                    - semester
+#                    - general
+#                  description: Empty courseType consider as general
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: ID of the course to retrieve
+        - name: courseType
+          in: query
+          required: false
+          description: Choose the course type (optional, defaults to "general")
+          schema:
+            type: string
+            enum:
+                - semester
+                - general
+            default: general
+      responses:
+        '200':
+          description: Course found
+          content:
+            application/json:
+              schema:
+                properties:
+                  courseType:
+                    type: string
+                    enum: [ "semester", "general" ]
+                  Course:
+                    $ref: '#/components/schemas/Course'
+                  semesterCourse:
+                    $ref: '#/components/schemas/SemesterCourse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /courses:
+    get:
+        security:
+        - BearerAuth: [ ]
+        summary: Get courses
+        tags:
+          - Educational Manager
+          - Student
+          - Professor
+        #      requestBody:
+        #        description: Course fields
+        #        required: false
+        #        content:
+        #          application/json:
+        #            schema:
+        #              type: object
+        #              properties:
+        #                courseType:
+        #                  type: string
+        #                  enum:
+        #                    - semester
+        #                    - general
+        #                  description: Empty courseType consider as general
+        parameters:
+          - name: courseType
+            in: query
+            required: false
+            description: Choose the course type (optional, defaults to "general")
+            schema:
+              type: string
+              enum:
+                - semester
+                - general
+              default: general
+        responses:
+          '200':
+            description: Course found
+            content:
+              application/json:
+                schema:
+                  properties:
+                    courseType:
+                      type: string
+                      enum: [ "semester", "general" ]
+                    Course:
+                      $ref: '#/components/schemas/Course'
+                    semesterCourse:
+                      $ref: '#/components/schemas/SemesterCourse'
+          '401':
+            $ref: '#/components/responses/Unauthorized'
+          '404':
+            $ref: '#/components/responses/NotFound'
+          '500':
+            $ref: '#/components/responses/InternalServerError'
+  /students:
+    get:
+      summary: Retrieve a list of students
+      tags:
+        - Educational Manager
+      description: Retrieve a list of all students in the database, this action is only approved for educational manager
+      security:
+        - BearerAuth: [ ]
+      parameters: [ ]
+      responses:
+        '200':
+          description: A list of students
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Student_user'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /Professors:
+    get:
+      summary: Retrieve a list of teachers
+      tags:
+        - Educational Manager
+      description: Retrieve a list of all teachers in the database, this action is only approved for educational manager
+      security:
+        - BearerAuth: [ ]
+      parameters: [ ]
+      responses:
+        '200':
+          description: A list of teachers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Teacher_user'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /student/{id}:
+    get:
+      summary: Retrieve a student by ID
+      tags:
+        - Educational Manager
+      description: Retrieve a student by their ID in the database, this action is only approved for educational manager
+      security:
+        - BearerAuth: [ ]
+      parameters:
+        - name: id
+          in: path
+          description: ID of the student to retrieve
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A student object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Student_user'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    put:
+      summary: Student update him/her information
+      tags:
+        - Student
+      description: Update a student's information by ID, this action is only approved for the student with provided id
+      security:
+        - BearerAuth: [ ]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: Your ID
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Student_user'
+        description: Fields to update
+        required: true
+      responses:
+        '200':
+          description: Your information updated successfully
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /Professor/{id}:
+    get:
+      summary: Retrieve a teacher by ID
+      tags:
+        - Educational Manager
+      description: Retrieve a teacher by their ID in the database, this action is only approved for educational manager
+      security:
+        - BearerAuth: [ ]
+      parameters:
+        - name: id
+          in: path
+          description: ID of the teacher to retrieve
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A teacher object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Teacher_user'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    put:
+       summary: Teacher update him/her information
+       tags:
+         - Professor
+       description: Update a teacher's information by ID, this action is only approved for the teacher with provided id
+       security:
+         - BearerAuth: [ ]
+       parameters:
+         - in: path
+           name: id
+           required: true
+           description: Your ID
+           schema:
+             type: string
+       requestBody:
+         content:
+           application/json:
+             schema:
+               $ref: '#/components/schemas/Teacher_user'
+         description: Fields to update
+         required: true
+       responses:
+         '200':
+           description: Your information updated successfully
+         '401':
+           $ref: '#/components/responses/Unauthorized'
+         '404':
+           $ref: '#/components/responses/NotFound'
+         '500':
+           $ref: '#/components/responses/InternalServerError'
+
+components:
+  schemas:
+    User:
+      type: object
+      description: A user object representing a person in the system.
+      required:
+        - name
+        - email
+      properties:
+        name:
+          type: string
+          description: The name of the user.
+        password:
+          type: string
+          description: The user's password (hashed for security reasons).
+        email:
+          type: string
+          format: email
+          description: The email address of the user.
+        phone:
+          type: integer
+          format: int32
+          minimum: 0
+          description: The phone number of the user (if available).
+    Student:
+      type: object
+      properties:
+        first_name:
+          type: string
+          description: The first name student.
+        last_name:
+          type: string
+          description: last name of student.
+        password:
+          type: string
+          description: The user's password (hashed for security reasons).
+        email:
+          type: string
+          format: email
+          description: The email address of the user.
+        phone_number:
+          type: string
+          description: The phone number of the user (if available).
+          example: "9120431838"
+        education_level:
+          type: string
+          enum: [ 'Bachelor', 'Master', 'PhD' ]
+          description: The level of study for the student
+          example: Bachelor
+        entrance_year:
+          type: integer
+          minimum: 0
+          description: The year the student entered the program
+          example: 2022
+        student_ID:
+          type: integer
+          minimum: 0
+          description: id for student
+          example: 12
+        entraance_semester:
+          type: integer
+          description: The semester the student entered the program
+          minimum: 1000
+          maximum: 9999
+          example: 20221
+        average_score:
+          type: number
+          minimum: 0
+          maximum: 20
+          description: The student'saverage score
+          example: 18.5
+        faculty:
+          type: string
+          description: The faculty the student belongs to
+          example: CSE
+        major:
+          type: string
+          description: The field of study for the student
+          example: CE
+      required:
+        - first_name
+        - last_name
+        - password
+        - phone_number
+        - email
+        - education_level
+        - entrance_year
+        - entraance_semester
+        - average_score
+        - faculty
+        - major
+        - student_ID
+        
+    Professor:
+      type: object
+      properties:
+        first_name:
+          type: string
+          description: The first name student.
+        last_name:
+          type: string
+          description: last name of student.
+        password:
+          type: string
+          description: The user's password (hashed for security reasons).
+        email:
+          type: string
+          format: email
+          description: The email address of the user.
+        phone_number:
+          type: string
+          description: The phone number of the user (if available).
+          example: "9120431838"
+        faculty:
+          type: string
+          description: Faculty of the teacher.
+          example: CSE
+        major:
+          type: string
+          description: Field of the teacher.
+          example: CE
+        level:
+          type: string
+          description: Level of the professor.
+          example: professor
+        professor_ID:
+          type: number
+          description: id of professor
+          example: 12
+       
+        
+        
+    EducationalManager:
+      type: object
+      properties:
+        first_name:
+          type: string
+          description: The first name student.
+        last_name:
+          type: string
+          description: last name of student.
+        password:
+          type: string
+          description: The user's password (hashed for security reasons).
+        email:
+          type: string
+          format: email
+          description: The email address of the user.
+        phone_number:
+          type: string
+          description: The phone number of the user (if available).
+          example: "9120431838"
+        faculty:
+          type: string
+          required: true
+          description: The faculty that the educational manager is in charge of.
+          example: CSE
+        employee_ID:  
+          type: number
+          
+    Course:
+      type: object
+      required:
+        - id
+        - credit
+        - field
+      properties:
+        _id:
+          type: string
+          description: The unique identifier for the general course.
+          example: "Net"
+        pre_required:
+          type: array
+          items:
+            type: string
+            description: A list of the unique identifiers for the general courses that are prerequisites for this general course.
+            example: [ "OS", "AI" ]
+        co_required:
+          type: array
+          items:
+            type: string
+            description: A list of the unique identifiers for the general courses that are corequisites for this general course.
+            example: [ "MATH201" ]
+        credit:
+          type: integer
+          enum: [ 0, 1, 2, 3 ]
+          description: The number of credit hours for the course.
+          example: 3
+        field:
+          type: string
+          description: The field of study for the course.
+          example: "Computer Science"
+    SemesterCourse:
+      type: object
+      required:
+        - general_course
+        - course_name
+        - class_time
+        - exam_time
+        - exam_location
+        - teacher
+        - capacity
+        - semester
+      properties:
+        general_course:
+          type: object
+          description: The ID of the general course that this semester course is based on.
+        course_name:
+          type: string
+          description: The name of the semester course.
+          example: "Introduction to Computer Science - Part 1"
+        class_time:
+          type: array
+          description: The days and times of the semester course classes.
+          items:
+            type: mixed
+            description: |
+              The structure of the mixed type is:
+              [day_in_week, start_time, end_time]
+              or
+              [day_in_week, day_2_in_week, start_time, end_time]
+            example: [ 1, 14, 16 ]
+          minItems: 3
+          maxItems: 4
+        exam_time:
+          type: array
+          description: The day and time of the semester course exam.
+          items:
+            type: mixed
+            description: |
+              The structure of the mixed type is:
+              [day_in_exam_time, start_time, end_time]
+            example: [ 5, 10, 12 ]
+          minItems: 3
+          maxItems: 3
+        exam_location:
+          type: array
+          description: The location of the semester course exam.
+          items:
+            type: mixed
+            description: |
+              The structure of the mixed type is:
+              [faculty_name, room_number]
+            example: [ "Faculty of Computer Science", 101 ]
+          minItems: 2
+          maxItems: 2
+        teacher:
+          type: string
+          description: The name of the teacher who teaches the semester course.
+          example: "John Doe"
+        capacity:
+          type: integer
+          description: The maximum number of students that can register for the semester course.
+          example: 50
+          minimum: 0
+        semester:
+          type: integer
+          description: The semester in which the course is offered.
+          example: 9811
+          minimum: 1000
+          maximum: 9999
+          multipleOf: 1
+    Standard_course:
+      allOf:
+        - $ref: '#/components/schemas/Course'
+        - $ref: '#/components/schemas/SemesterCourse'
+  securitySchemes:
+    BearerAuth:
+      type: http
+      name: authorization
+      scheme: Bearer
+      bearerFormat: JWT
+      in: header
+  responses:
+    Unauthorized:
+      description: Unauthorized
+    InternalServerError:
+      description: Internal Server Error
+    NotFound:
+      description: ID Not Found
+    InvalidCourse:
+      description: Invalid course provided
+
